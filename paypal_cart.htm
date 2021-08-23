@@ -1,0 +1,129 @@
+<!------------------------------------------------------------------------------------>
+
+
+<p class="p1"><span style="color: rgb(80, 0, 80);">If you prefer to make PayPal payments using your mobile app, please
+        make payments to [OrgPayPal@email.address] and enter amount as the Total Amount.</span></p>
+
+<div id="ppalEventPymnt">
+    <p id="EvntPymt">&nbsp;</p>
+
+    <div dir="ltr"
+        style="color: rgb(34, 34, 34); font-size:13pt; font-family: 'Helvetica Neue, Helvetica, Arial, sans-serif;' ">
+        <p><b>PayPal: Online Event payment</b></p>
+
+        <p><b>Event name : [Title] on [Date] @ [TIME] PST</b></p>
+    </div>
+
+    <form action="https://www.paypal.com/us/cgi-bin/webscr" id="_xclick" method="post" name="_xclick"
+        onsubmit="return validate_names(this);" target="_new"><input name="cmd" type="hidden" value="_xclick" /><input
+            name="business" type="hidden" value="[OrgPayPal@email.address]" /><input name="currency_code" type="hidden"
+            value="USD" /><input name="item_name" type="hidden" value="[Title] Event charges" /><input id="event_amt"
+            name="amount" type="hidden" value="0.0" />
+        <table cellpadding="25" summary="[Title] event charges">
+            <tbody>
+                <tr>
+                    <td><input name="on0" type="hidden" value="FirstName" />First Name</td>
+                    <td><input name="os0" onkeyup="filterJunk(this,/[^a-zA-Z]/g);" size="30" type="text" /></td>
+                </tr>
+                <tr>
+                    <td><input name="on1" type="hidden" value="LastName" />Last Name</td>
+                    <td><input name="os1" onkeyup="filterJunk(this,/[^a-zA-Z]/g);" size="30" type="text" /></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <ul id="membersList">
+                        </ul>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input name="on3" type="hidden" value="No_of_Members" />No. of tickets</td>
+                    <td><input id="member_cnt" max="10" min="1" name="member_cnt" 
+                            onchange="addMember(); myEventAmt()" size="30" type="number" value="1" /></td>
+                </tr>
+                <tr>
+                    <td><input name="to_am_l0" type="hidden" />Total amount</td>
+                    <td>$<input id="non_total_amt" name="total_amt" readonly="readonly" size="10" type="text"
+                            value="10.60" /></td>
+                </tr>
+                <script>
+                    function myEventAmt() {
+                        var x = document.getElementById("member_cnt").value;
+                        var amt = x * 10;
+                        var paypalfee = (amt * 3.04) / 100 + 0.3;
+                        document.getElementById("non_total_amt").value = amt + paypalfee;
+                        document.getElementById("event_amt").value = amt + paypalfee;
+                    }
+                    function validate_names(xform) {
+                        if (trim(xform.os0.value) == "" || trim(xform.os1.value) == "") {
+                            alert('Please Enter Your First Name and Last Name.');
+                            xform.os0.focus();
+                            return false;
+                        }
+                        return true;
+                    }
+
+                    function getNumberText(xNumber, xText) {
+                        if (!isNaN(xNumber) && xNumber > 0) return xNumber + " " + xText;
+                        return "";
+                    }
+                    function validate(xform) {
+
+                        if (!validate_names(xform)) return false;
+
+                        if (isNaN(xform.total_amt.value) || xform.total_amt.value <= 0) {
+                            alert('Total amount is invalid');
+                            return false;
+                        }
+                        else {
+                            xform.amount.value = xform.total_amt.value;
+                            return true;
+                        }
+
+                    }
+                    function ltrim(s) {
+                        return s.replace(/^\s*/, "")
+
+                    }
+                    function rtrim(s) {
+                        return s.replace(/\s*$/, "");
+                    }
+                    function trim(s) {
+                        return rtrim(ltrim(s));
+                    }
+                    function replace(string, text, by) {
+                        var strLength = string.length, txtLength = text.length;
+                        if ((strLength == 0) || (txtLength == 0)) return string;
+                        var i = string.indexOf(text);
+                        if ((!i) && (text != string.substring(0, txtLength))) return string;
+                        if (i == -1) return string;
+                        var newstr = string.substring(0, i) + by;
+                        if (i + txtLength < strLength)
+                            newstr += replace(string.substring(i + txtLength, strLength), text, by);
+                        return newstr;
+                    }
+                    function filterJunk(field, re) {
+                        str = field.value;
+                        if (!str.match(re)) return true;
+                        newstr = str.replace(re, "");
+                        field.value = newstr; field.focus();
+                        return false;
+                    }
+
+                    function addMember() {
+                        var node = document.createElement("LI");
+                        var textnode = document.createTextNode("Family Member or Friend");
+                        node.appendChild(textnode);
+                        document.getElementById("membersList").appendChild(node);
+                    }
+
+                </script>
+            </tbody>
+        </table>
+
+        <p>&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input
+                alt="Make payments with PayPal - it's fast, free and secure!" border="0" name="submit"
+                src="https://www.paypal.com/en_US/i/btn/x-click-butcc.gif" type="image" /></p>
+    </form>
+</div>
+<!----------------------------------------------------------------->
